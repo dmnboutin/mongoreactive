@@ -1,4 +1,4 @@
-package com.example.mongodb;
+package com.example.mongodb.operations;
 
 import com.example.mongodb.model.Account;
 import com.example.mongodb.repository.AccountCrudRepository;
@@ -9,13 +9,13 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
-public class AccountService {
+public class AccountRepositoryOperations {
     
     private final AccountCrudRepository accountCrudRepository;
     private final AccountReactiveRepository accountReactiveRepository;
 
-    public AccountService(final AccountCrudRepository accountCrudRepository,
-                          final AccountReactiveRepository accountReactiveRepository ) {
+    public AccountRepositoryOperations(final AccountCrudRepository accountCrudRepository,
+                                       final AccountReactiveRepository accountReactiveRepository ) {
         this.accountCrudRepository = accountCrudRepository;
         this.accountReactiveRepository = accountReactiveRepository;
     }
@@ -25,10 +25,9 @@ public class AccountService {
                 .findAll(Example.of(new Account(null, "owner", null)));
     }
 
-    public void createAccount() {
+    public Mono<Account> createAccount() {
         Mono<Account> accountMono
                 = accountReactiveRepository.save(new Account(null, "owner", 12.3));
-        Mono<Account> accountMono2 = accountReactiveRepository
-                .findById("123456");
+        return accountMono;
     }
 }
